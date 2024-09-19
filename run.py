@@ -8,7 +8,7 @@ import warnings  # 추가된 부분
 # InsecureRequestWarning 경고 무시
 warnings.filterwarnings("ignore", message="Unverified HTTPS request")
 
-with open("config.json", "rb") as f:
+with open("/home/arang/web/lostark/lostark-auction-noti/config.json", "rb") as f:
     config = json.loads(f.read())
 
 token = config["token"]
@@ -108,7 +108,7 @@ s.headers = {
 }
 # s.proxies = {"https": "http://localhost:8888"}  # 필요 시 사용
 
-with open("conditions.json", "rb") as f:
+with open("/home/arang/web/lostark/lostark-auction-noti/conditions.json", "rb") as f:
     try:
         conditions = json.loads(f.read())
     except:
