@@ -21,10 +21,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200010,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   },
@@ -50,10 +55,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200010,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   },
@@ -73,10 +83,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200020,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   },
@@ -96,10 +111,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200020,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   },
@@ -119,10 +139,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200030,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   },
@@ -142,10 +167,15 @@
         "MaxValue":13
       }
     ],
+    "SkillOptions": [
+      
+    ],
     "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
     "CategoryCode": 200030,
     "ItemTier": 4,
     "ItemGrade": "고대",
+    "ItemGrade2": "6",
     "PageNo": 1,
     "SortCondition": "ASC"
   }
