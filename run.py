@@ -233,14 +233,13 @@ def parse_endDate(endDate_str):
             print(f"[parse_endDate] 종료 시간 파싱 실패: {endDate_str}")
             return None
     # 서버에서 받은 시간에 KST 시간대를 설정
-    dt = dt.replace(tzinfo=timezone.utc).astimezone(KST)
+    dt = dt.replace().astimezone(KST)
     return dt
 
 def generate_item_id(item):
     # 아이템의 고유 ID 생성 (아이템 이름, 옵션, 가격, 종료 시간 등을 조합)
     unique_string = f"{item['itemName']}_{item['optionInfo']}_{item['price']}_{item['endDate']}"
     return hashlib.md5(unique_string.encode('utf-8')).hexdigest()
-
 def send_discord_message(condition_name, item_details, lowest_price, is_lowest_price=False):
     global webhook_url, webhook_url2
     # 남은 시간 계산
@@ -265,17 +264,30 @@ def send_discord_message(condition_name, item_details, lowest_price, is_lowest_p
     price_difference_percentage = (price_difference / lowest_price) * 100 if lowest_price != 0 else 0
     price_difference_display = f"{price_difference} ({price_difference_percentage:.2f}%)"
 
+    # 거래 가능 횟수 확인
+    trade_allow_count = item_details.get('tradeAllowCount', 0)
+
     # 메시지 제목 및 색상 설정
-    if is_lowest_price:
+    if trade_allow_count != 2 and is_lowest_price:
         title = f"[{condition_name}] 🏆 최저가 갱신!"
         description = f"현재 최저가: {current_price}"
         color = 0xff0000  # 빨간색으로 강조
         webhook_to_use = webhook_url2  # 최저가 알림은 webhook_url2 사용
+    elif trade_allow_count == 2 and not is_lowest_price:
+        title = f"[{condition_name}] 거래 가능 횟수 2회 아이템 등록"
+        description = f"가격: {current_price} (최저가 대비 {price_difference_display} 차이)"
+        color = 0x0000ff  # 파란색
+        webhook_to_use = webhook_url  # 일반 알림 웹훅 사용
+    elif trade_allow_count == 2 and is_lowest_price:
+        title = f"[{condition_name}] 최저가 + 쌔삥"
+        description = f"현재 최저가: {current_price}"
+        color = 0xff00ff  # 보라색
+        webhook_to_use = webhook_url2  # 일반 알림 웹훅 사용
     else:
         title = f"[{condition_name}] 새로운 아이템 등록"
         description = f"가격: {current_price} (최저가 대비 {price_difference_display} 차이)"
         color = 0x00ff00  # 녹색
-        webhook_to_use = webhook_url  # 신규 아이템 알림은 기존 webhook_url 사용
+        webhook_to_use = webhook_url  # 일반 알림 웹훅 사용
 
     # 옵션 정보 구성
     option_info = item_details['optionInfo']
@@ -302,7 +314,7 @@ def send_discord_message(condition_name, item_details, lowest_price, is_lowest_p
             },
             {
                 "name": "거래 가능 횟수",
-                "value": str(item_details['tradeAllowCount']),
+                "value": str(trade_allow_count),
                 "inline": True
             },
             {
@@ -341,6 +353,7 @@ def send_discord_message(condition_name, item_details, lowest_price, is_lowest_p
     except Exception as e:
         print(f"[send_discord_message] 메시지 전송 중 오류 발생: {e}")
         traceback.print_exc()
+
 
 def log(message):
     print(message)
@@ -589,7 +602,7 @@ for condition in conditions:
         if prices:
             current_lowest_price = min(prices)
             # 가격 차이가 20% 이하인 아이템만 필터링
-            threshold_price = current_lowest_price * 1.2
+            threshold_price = current_lowest_price * 1.15
             filtered_items = [item for item in items if item['price'] <= threshold_price]
 
             # 최저가 아이템 가져오기
@@ -628,6 +641,8 @@ for condition in conditions:
                         send_discord_message(condition, lowest_price_item, current_lowest_price, is_lowest_price=True)
                     else:
                         print("[!] Matching item not found in result_items.")
+                        lowest_price_item['ProductId'] = "can't_find"
+                        send_discord_message(condition, lowest_price_item, current_lowest_price, is_lowest_price=True)
                 else:
                     print("[x] 'infos' 데이터가 없습니다.")
 
@@ -644,8 +659,52 @@ for condition in conditions:
             else:
                 pass  # 최저가 변동 없음
 
+            # 여기부터 신규 등록된 아이템에 대한 알림 전송
+            # 모든 아이템에 대해 알림 전송 (이미 알림을 보낸 아이템은 제외)
+            for item in filtered_items:
+                item_id = generate_item_id(item)
+                cursor.execute('SELECT item_id FROM notified_items WHERE item_id = ?', (item_id,))
+                if cursor.fetchone():
+                    # 이미 알림을 보낸 아이템
+                    continue
+                infos_json = item.get('infos')
+                if infos_json:
+                    infos = json.loads(infos_json)
+                    
+                    # search_item의 인자로 infos를 넘겨서 검색 수행
+                    search_result = search_item(generate_query_params(infos))
+                    result_items = parse_auction_items(search_result)
+
+                    # 최저가 아이템에 해당하는 정보를 찾기
+                    matched_product_id = None
+                    
+                    for item1 in result_items:
+                        if items_match(item, item1):
+                            matched_product_id = item1['ProductId']
+                            print(f"[+] Matched Product ID: {matched_product_id}")
+                            # 최저가 아이템에 ProductId 추가
+                            item['ProductId'] = matched_product_id
+                            break
+
+                    is_lowest_price = (item == lowest_price_item) and (previous_lowest_price is None or current_lowest_price < previous_lowest_price)
+
+                    if matched_product_id:
+                        # 최저가 아이템에 대한 알림 전송 (webhook_url2 사용)
+                        send_discord_message(condition, item, current_lowest_price, is_lowest_price=is_lowest_price)
+                    else:
+                        print("[!] Matching item not found in result_items.")
+                        lowest_price_item['ProductId'] = "can't_find"
+                        send_discord_message(condition, item, current_lowest_price, is_lowest_price=is_lowest_price)
+                else:
+                    print("[x] 'infos' 데이터가 없습니다.")
+                
+                # 알림 보낸 아이템 기록
+                cursor.execute('INSERT INTO notified_items (item_id) VALUES (?)', (item_id,))
+                conn.commit()
+
         else:
             print(f"[{datetime.now(KST)}] '{condition}' 유효한 가격 정보가 있는 아이템이 없습니다.")
+
     else:
         print(f"[{datetime.now(KST)}] '{condition}' 유효한 아이템을 찾을 수 없습니다.")
 

@@ -67,6 +67,62 @@
     "PageNo": 1,
     "SortCondition": "ASC"
   },
+  "목걸이-추피 상":{
+    "ItemGradeQuality": 70,
+    "EtcOptions": [
+      {
+        "FirstOption": 7,
+        "SecondOption":41,
+        "MinValue": 3,
+        "MaxValue": 3
+      },
+      {
+        "FirstOption":8,
+        "SecondOption":1,
+        "MinValue":12,
+        "MaxValue":13
+      }
+    ],
+    "SkillOptions": [
+      
+    ],
+    "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
+    "CategoryCode": 200010,
+    "ItemTier": 4,
+    "ItemGrade": "고대",
+    "ItemGrade2": "6",
+    "PageNo": 1,
+    "SortCondition": "ASC"
+  },
+  "목걸이-적주피 상":{
+    "ItemGradeQuality": 70,
+    "EtcOptions": [
+      {
+        "FirstOption": 7,
+        "SecondOption":42,
+        "MinValue": 3,
+        "MaxValue": 3
+      },
+      {
+        "FirstOption":8,
+        "SecondOption":1,
+        "MinValue":12,
+        "MaxValue":13
+      }
+    ],
+    "SkillOptions": [
+      
+    ],
+    "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
+    "CategoryCode": 200010,
+    "ItemTier": 4,
+    "ItemGrade": "고대",
+    "ItemGrade2": "6",
+    "PageNo": 1,
+    "SortCondition": "ASC"
+  },
   "귀걸이-무공퍼 상":{
     "ItemGradeQuality": 70,
     "EtcOptions": [
@@ -123,6 +179,40 @@
     "PageNo": 1,
     "SortCondition": "ASC"
   },
+  "귀걸이-공퍼/무공퍼 중중":{
+    "ItemGradeQuality": 70,
+    "EtcOptions": [
+      {
+        "FirstOption": 7,
+        "SecondOption":45,
+        "MinValue": 2,
+        "MaxValue": 2
+      },
+      {
+        "FirstOption": 7,
+        "SecondOption":46,
+        "MinValue": 2,
+        "MaxValue": 2
+      },
+      {
+        "FirstOption":8,
+        "SecondOption":1,
+        "MinValue":12,
+        "MaxValue":13
+      }
+    ],
+    "SkillOptions": [
+      
+    ],
+    "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
+    "CategoryCode": 200020,
+    "ItemTier": 4,
+    "ItemGrade": "고대",
+    "ItemGrade2": "6",
+    "PageNo": 1,
+    "SortCondition": "ASC"
+  },
   "반지-치피 상":{
     "ItemGradeQuality": 70,
     "EtcOptions": [
@@ -159,6 +249,40 @@
         "SecondOption":49,
         "MinValue": 3,
         "MaxValue": 3
+      },
+      {
+        "FirstOption":8,
+        "SecondOption":1,
+        "MinValue":12,
+        "MaxValue":13
+      }
+    ],
+    "SkillOptions": [
+      
+    ],
+    "Sort": "BUY_PRICE",
+    "FirstCategory": 200000,
+    "CategoryCode": 200030,
+    "ItemTier": 4,
+    "ItemGrade": "고대",
+    "ItemGrade2": "6",
+    "PageNo": 1,
+    "SortCondition": "ASC"
+  },
+  "반지-치적/치피 중중":{
+    "ItemGradeQuality": 70,
+    "EtcOptions": [
+      {
+        "FirstOption": 7,
+        "SecondOption":49,
+        "MinValue": 2,
+        "MaxValue": 2
+      },
+      {
+        "FirstOption": 7,
+        "SecondOption":50,
+        "MinValue": 2,
+        "MaxValue": 2
       },
       {
         "FirstOption":8,
